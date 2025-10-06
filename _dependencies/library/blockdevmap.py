@@ -6,7 +6,7 @@
 # Licensed under the MIT License. See the LICENSE accompanying this file
 # for the specific language governing permissions and limitations under
 # the License.
-# /sbin/ebsnvme-id - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html
+# /sbin/ebsnvme-id - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.htmls
 
 from __future__ import (absolute_import, division, print_function)
 
