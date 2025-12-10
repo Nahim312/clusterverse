@@ -110,9 +110,12 @@ name: "{{ inventory_hostname }}"
 
 # Optional fields that you can specify to add additional information to the
 # output.
-#fields:
-#  env: staging
-
+fields_under_root: true
+fields:
+  sky:
+    top_tenant: "{{ beats_config.filebeat.top_tenant | default(beats_config.top_tenant | default('default')) }}"
+  service:
+    name: "{{ beats_config.filebeat.service_name | default(beats_config.service_name | default('internal-logs')) }}"
 
 #============================== Dashboards =====================================
 # These settings control loading the sample dashboards to the Kibana index. Loading
@@ -186,8 +189,30 @@ output.elasticsearch:
 {% if (beats_target_hosts is defined and (beats_target_hosts | length)) or (beats_config.filebeat.output_logstash_hosts is defined and (beats_config.filebeat.output_logstash_hosts | length)) %}
 output.logstash:
   # The Logstash hosts
-  # "beats_target_hosts" below refers to a previous Clusterverse release variable, it will be deprecated in Clusterverse 4.0
   hosts: {{ beats_config.filebeat.output_logstash_hosts | default(beats_target_hosts) }}
+
+  # Security config for TOP/TLS
+  ssl.enabled: {{ beats_config.filebeat.ssl_enabled | default(true) | bool }}
+  ssl.verification_mode: {{ beats_config.filebeat.ssl_verification_mode | default('none') }}
+
+  ttl: {{ beats_config.filebeat.ttl | default('300s') }}
+  pipelining: {{ beats_config.filebeat.pipelining | default(0) }}
+
+{% if beats_config.filebeat.ssl_supported_protocols is defined %}
+  ssl.supported_protocols: {{ beats_config.filebeat.ssl_supported_protocols }}
+{% endif %}
+
+{% if beats_config.filebeat.ssl_certificate_authorities is defined %}
+  ssl.certificate_authorities: {{ beats_config.filebeat.ssl_certificate_authorities }}
+{% endif %}
+
+{% if beats_config.filebeat.ssl_certificate is defined %}
+  ssl.certificate: "{{ beats_config.filebeat.ssl_certificate }}"
+{% endif %}
+
+{% if beats_config.filebeat.ssl_key is defined %}
+  ssl.key: "{{ beats_config.filebeat.ssl_key }}"
+{% endif %}
 {% endif %}
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications
