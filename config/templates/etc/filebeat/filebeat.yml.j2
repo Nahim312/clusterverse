@@ -113,7 +113,7 @@ name: "{{ inventory_hostname }}"
 fields_under_root: true
 fields:
   sky:
-    top_tenant: "{{ beats_config.filebeat.top_tenant | default(beats_config.top_tenant | default('default')) }}"
+    top_tenant: "{{ beats_config.filebeat.top_tenant | default(beats_config.top_tenant | default('dpe-top')) }}"
   service:
     name: "{{ beats_config.filebeat.service_name | default(beats_config.service_name | default('internal-logs')) }}"
 
